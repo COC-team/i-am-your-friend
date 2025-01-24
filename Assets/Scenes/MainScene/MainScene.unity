@@ -7185,7 +7185,7 @@ MonoBehaviour:
   player: {fileID: 2143072740}
   triggerRadius: 15
   textOffset: {x: 0, y: 0}
-  loadSceneName: SecondScene
+  loadSceneName: DrunkCleaning
   mainCamera: {fileID: 2075108576}
   numSegments: 100
 --- !u!4 &422035619
