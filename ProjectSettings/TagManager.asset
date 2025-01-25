@@ -12,10 +12,10 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - objects
+  - walls
+  - floor
+  - sprite
   - 
   - 
   - 
@@ -41,6 +41,18 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: walls
+    uniqueID: 231309753
+    locked: 0
+  - name: floor
+    uniqueID: 2478796991
+    locked: 0
+  - name: sprites
+    uniqueID: 815163343
+    locked: 0
+  - name: Objects
+    uniqueID: 1659068663
     locked: 0
   m_RenderingLayers:
   - Default
