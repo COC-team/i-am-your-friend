@@ -1,12 +1,14 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CursorManager : MonoBehaviour
 {
-    public Image cursorImage;   // UI Image для кастомного курсора
-    public Canvas canvas;       // Ссылка на Canvas в World Space
+    public SpriteRenderer cursorSpriteRenderer;   // SpriteRenderer для кастомного курсора
+    public Canvas canvas;                         // Ссылка на Canvas в World Space
 
     private RectTransform canvasRect; // RectTransform Canvas
+
+    // Параметры смещения курсора (в пикселях)
+    public Vector2 cursorOffset = new Vector2(20f, -20f); 
 
     void Start()
     {
@@ -27,42 +29,51 @@ public class CursorManager : MonoBehaviour
 
         // Получаем RectTransform от Canvas
         canvasRect = canvas.GetComponent<RectTransform>();
+
+        // Если не назначен SpriteRenderer, выводим ошибку
+        if (cursorSpriteRenderer == null)
+        {
+            Debug.LogError("SpriteRenderer for the cursor is not assigned.");
+        }
     }
 
     void Update()
     {
-        if (canvas == null) return;
+        if (canvas == null || cursorSpriteRenderer == null) return;
 
         // Получаем текущую позицию мыши
         Vector2 cursorPos = Input.mousePosition;
 
         // Переводим экранные координаты мыши в мировые координаты
-        RectTransformUtility.ScreenPointToWorldPointInRectangle(
-            canvasRect, cursorPos, canvas.worldCamera, out Vector3 worldPos);
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(cursorPos);
 
-        // Ограничиваем позицию курсора в пределах Canvas
-        Vector2 clampedPos = ClampToCanvas(worldPos);
+        // Добавляем смещение (для 2D)
+        worldPos.x += cursorOffset.x / canvas.scaleFactor; // Учтём масштаб Canvas
+        worldPos.y += cursorOffset.y / canvas.scaleFactor; // Учтём масштаб Canvas
 
-        // Устанавливаем позицию кастомного курсора
-        cursorImage.rectTransform.position = clampedPos;
+        // Ограничиваем позицию курсора в пределах Canvas, учитывая смещение и размер курсора
+        worldPos = ClampToCanvas(worldPos);
+
+        // Устанавливаем позицию курсора с SpriteRenderer
+        cursorSpriteRenderer.transform.position = new Vector3(worldPos.x, worldPos.y, 0f);  // Z=0 для 2D
     }
 
-    private Vector2 ClampToCanvas(Vector3 position)
+    private Vector3 ClampToCanvas(Vector3 position)
     {
         // Получаем границы Canvas в мировых координатах
         Vector3[] corners = new Vector3[4];
         canvasRect.GetWorldCorners(corners);
 
         // Левая, правая, нижняя и верхняя границы
-        float minX = corners[0].x;
-        float maxX = corners[2].x;
-        float minY = corners[0].y;
-        float maxY = corners[1].y;
+        float minX = corners[0].x + cursorOffset.x;
+        float maxX = corners[2].x - cursorOffset.x;
+        float minY = corners[0].y - cursorOffset.y;
+        float maxY = corners[1].y + cursorOffset.y;
 
-        // Ограничиваем позицию курсора
+        // Ограничиваем позицию курсора с учетом смещения и размера
         float clampedX = Mathf.Clamp(position.x, minX, maxX);
         float clampedY = Mathf.Clamp(position.y, minY, maxY);
 
-        return new Vector2(clampedX, clampedY);
+        return new Vector3(clampedX, clampedY, position.z);  // Возвращаем в мировых координатах
     }
 }
