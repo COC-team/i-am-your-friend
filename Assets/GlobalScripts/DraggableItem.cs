@@ -4,20 +4,20 @@ using UnityEngine.EventSystems;
 
 public class DraggableItem : MonoBehaviour, IPointerDownHandler, IDragHandler
 {
-    private RectTransform rectTransform;
-    private Canvas canvas;
-    private Camera uiCamera;
-    private RectTransform canvasRect; // RectTransform Canvas
-    private Vector2 offset;
+    private RectTransform rectTransform; // RectTransform объекта
+    private Canvas canvas;               // Родительский Canvas
+    private Camera uiCamera;             // Камера для World Space Canvas
+    private RectTransform canvasRect;    // RectTransform Canvas
+    private Vector2 offset;              // Смещение относительно точки нажатия
 
     void Start()
     {
         rectTransform = GetComponent<RectTransform>();
-        canvas = GetComponentInParent<Canvas>();  // Получаем родительский Canvas
-        canvasRect = canvas.GetComponent<RectTransform>(); // RectTransform Canvas
+        canvas = GetComponentInParent<Canvas>();  // Находим родительский Canvas
+        canvasRect = canvas.GetComponent<RectTransform>();
 
-        // Если камера не указана, находим её автоматически
-        if (canvas != null && canvas.renderMode == RenderMode.ScreenSpaceCamera)
+        // Если Canvas в режиме ScreenSpace - Camera или WorldSpace, указываем камеру
+        if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
         {
             uiCamera = canvas.worldCamera;
         }
@@ -30,51 +30,54 @@ public class DraggableItem : MonoBehaviour, IPointerDownHandler, IDragHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-
-        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvas.transform as RectTransform, eventData.position, uiCamera, out Vector2 localPointerPos))
+        if (RectTransformUtility.ScreenPointToWorldPointInRectangle(
+                canvasRect, eventData.position, uiCamera, out Vector3 worldPointerPos))
         {
-            offset = localPointerPos - (Vector2)rectTransform.localPosition;
+            offset = (Vector2)worldPointerPos - (Vector2)rectTransform.position;
         }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-
-        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvas.transform as RectTransform, eventData.position, uiCamera, out Vector2 localPointerPos))
+        if (RectTransformUtility.ScreenPointToWorldPointInRectangle(
+                canvasRect, eventData.position, uiCamera, out Vector3 worldPointerPos))
         {
-            // Новая позиция с учётом смещения
-            Vector2 newPosition = localPointerPos - offset;
+            // Новая позиция с учетом смещения
+            Vector2 newPosition = (Vector2)worldPointerPos - offset;
 
             // Ограничиваем объект в пределах Canvas
             newPosition = ClampToCanvas(newPosition);
 
-            // Применяем ограниченную позицию
-            rectTransform.localPosition = newPosition;
-
+            // Устанавливаем позицию объекта
+            rectTransform.position = newPosition;
         }
     }
 
     private Vector2 ClampToCanvas(Vector2 position)
     {
-        // Получаем размеры Canvas
-        Vector2 canvasSize = canvasRect.sizeDelta;
+        // Получаем границы Canvas в мировых координатах
+        Vector3[] corners = new Vector3[4];
+        canvasRect.GetWorldCorners(corners);
 
-        // Получаем фактические размеры объекта
-        Vector2 objectSize = new Vector2(rectTransform.rect.width, rectTransform.rect.height);
+        // Левая, правая, нижняя и верхняя границы Canvas
+        float minX = corners[0].x;
+        float maxX = corners[2].x;
+        float minY = corners[0].y;
+        float maxY = corners[1].y;
 
+        // Получаем фактические размеры объекта с учетом масштаба
+        Vector2 objectSize = new Vector2(
+            rectTransform.rect.width * rectTransform.lossyScale.x,
+            rectTransform.rect.height * rectTransform.lossyScale.y
+        );
 
-        // Вычисляем границы с учётом размеров объекта
-        float minX = -canvasSize.x / 2 + objectSize.x / 2; // Левая граница
-        float maxX = canvasSize.x / 2 - objectSize.x / 2;  // Правая граница
-        float minY = -canvasSize.y / 2 + objectSize.y / 2; // Нижняя граница
-        float maxY = canvasSize.y / 2 - objectSize.y / 2;  // Верхняя граница
+        // Вычисляем границы объекта с учетом его размеров
+        float objectHalfWidth = objectSize.x / 2;
+        float objectHalfHeight = objectSize.y / 2;
 
-
-        // Ограничиваем позицию объекта в пределах Canvas
-        float clampedX = Mathf.Clamp(position.x, minX, maxX);
-        float clampedY = Mathf.Clamp(position.y, minY, maxY);
+        // Ограничиваем позицию объекта так, чтобы он не выходил за границы Canvas
+        float clampedX = Mathf.Clamp(position.x, minX + objectHalfWidth, maxX - objectHalfWidth);
+        float clampedY = Mathf.Clamp(position.y, minY + objectHalfHeight, maxY - objectHalfHeight);
 
         return new Vector2(clampedX, clampedY);
     }
