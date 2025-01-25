@@ -7,7 +7,7 @@ public class DestroyableObject : MonoBehaviour
 
     void Start()
     {
-        RemainingTime = 2f; // Устанавливаем стартовое время уничтожения
+        RemainingTime = 1f; // Устанавливаем стартовое время уничтожения
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         if (spriteRenderer == null)

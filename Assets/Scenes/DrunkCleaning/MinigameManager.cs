@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 
     public RectTransform maskRectTransform; // Маска для обрезки спрайта (RectTransform)
     public RectTransform spriteRectTransform; // Спрайт, который мы будем обрезать
+    public SceneReloader sceneReloader;
 
     void Start()
     {
@@ -60,6 +61,15 @@ public class GameManager : MonoBehaviour
         // Завершаем игру
         isGameRunning = false;
         Debug.Log("Игра окончена! Время истекло.");
+        sceneReloader.ReloadScene();
+    }
+    
+    public void WinGame()
+    {
+        // Завершаем игру
+        isGameRunning = false;
+        Debug.Log("Игра окончена! Вы победили.");
+        SceneManager.LoadScene("MainScene");
     }
 
     void UpdateMaskPosition()
