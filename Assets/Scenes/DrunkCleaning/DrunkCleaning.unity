@@ -2031,6 +2031,7 @@ MonoBehaviour:
   maxDragSpeed: 20
   minDragSpeed: 1
   maxDestroyedCount: 9
+  isResponsive: 1
 --- !u!1 &966308293
 GameObject:
   m_ObjectHideFlags: 0

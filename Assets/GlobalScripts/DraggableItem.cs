@@ -11,19 +11,28 @@ public class DraggableItem : MonoBehaviour, IPointerDownHandler, IDragHandler
     private Vector2 offset;
 
     public float maxDragSpeed = 20f;  // Увеличиваем отзывчивость в 10 раз
-    public float minDragSpeed = 2f; // Минимальная скорость (оставим большую отзывчивость на последнем объекте)
+    public float minDragSpeed = 2f;   // Минимальная скорость (оставляем большую отзывчивость на последнем объекте)
     public int maxDestroyedCount = 8; // Количество уничтоженных объектов, после которых отзывчивость минимальна
 
     private float dragSpeed;
 
+    public bool isResponsive = false;  // Флаг для включения/выключения изменения отзывчивости
+
     // Метод для обновления скорости
     public void UpdateDragSpeed(int destroyedCount)
     {
-        // Применяем более мягкое уменьшение скорости
-        float t = Mathf.InverseLerp(0, maxDestroyedCount, destroyedCount);
+        if (isResponsive)
+        {
+            // Применяем более мягкое уменьшение скорости
+            float t = Mathf.InverseLerp(0, maxDestroyedCount, destroyedCount);
 
-        // Меньше замедление и плавное замедление, сохраняем высокую отзывчивость в конце
-        dragSpeed = Mathf.Lerp(maxDragSpeed, minDragSpeed, Mathf.Pow(t, 0.2f)); // Чем меньше степень, тем менее выражено замедление
+            // Меньше замедление и плавное замедление, сохраняем высокую отзывчивость в конце
+            dragSpeed = Mathf.Lerp(maxDragSpeed, minDragSpeed, Mathf.Pow(t, 0.2f)); // Чем меньше степень, тем менее выражено замедление
+        }
+        else
+        {
+            dragSpeed = maxDragSpeed;  // Если флаг выключен, отзывчивость максимальная
+        }
     }
 
     private void Start()
@@ -65,7 +74,10 @@ public class DraggableItem : MonoBehaviour, IPointerDownHandler, IDragHandler
             newPosition = ClampToCanvas(newPosition);
 
             // Применяем уменьшенную скорость
-            newPosition = Vector2.Lerp(rectTransform.position, newPosition, dragSpeed * Time.deltaTime);
+            if (isResponsive)
+            { 
+                newPosition = Vector2.Lerp(rectTransform.position, newPosition, dragSpeed * Time.deltaTime);
+            }
 
             rectTransform.position = newPosition;
         }
