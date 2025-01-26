@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement; // Для возможности перезагрузки сцены
 
-public class GameManager : MonoBehaviour
+namespace Scenes.KillRoaches.Scripts
+{
+    public class MinigameManager : MonoBehaviour
 {
     public float gameDuration = 30f;        // Время игры в секундах
     private float timer;                    // Таймер игры
@@ -21,6 +23,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("Не привязаны маска или спрайт в инспекторе.");
         }
+        StartGame();
     }
 
     void Update()
@@ -73,10 +76,13 @@ public class GameManager : MonoBehaviour
             float screenWidth = Camera.main.orthographicSize * 2 * Screen.width / Screen.height;
 
             // Рассчитываем смещение маски влево
-            float shiftAmount = (screenWidth / 3f) * (1 - timePercent) * 21f; // Умножаем на 10 для усиления эффекта
+            float shiftAmount = (screenWidth / 3f) * (1 - timePercent) * 22f; // Умножаем на 10 для усиления эффекта
 
             // Обновляем позицию маски: смещаем её влево
             maskRectTransform.localPosition = new Vector3(-shiftAmount, maskRectTransform.localPosition.y, maskRectTransform.localPosition.z);
         }
     }
+}    
 }
+
+
