@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DrunkCleaning/DrunkCleaning.unity
     guid: 86c42d85d68551f40985fa4d9f8a07b1
+  - enabled: 1
+    path: Assets/Scenes/TvRemote/TV.unity
+    guid: 01ff4365b0cb66447a49b290e1791bac
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
