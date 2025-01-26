@@ -1,32 +1,51 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scenes.MainScene.Scripts
 {
     public class CameraFollow : MonoBehaviour
     {
-        public Transform target; // The object for the camera to follow (assign in the Inspector)
-        public Vector3 offset;   // Offset from the target object
-        public float smoothSpeed = 0.1f; // Speed of smoothing for camera movement
-    
+        public Transform target; // Объект, за которым будет следить камера
+        public Vector3 offset;   // Смещение относительно целевого объекта
+        public float smoothSpeed = 0.1f; // Скорость сглаживания движения камеры
+        public RectTransform canvasRectTransform; // Ссылка на RectTransform канваса
+
+        private Camera cam;
+
+        private void Start()
+        {
+            cam = Camera.main; // Получаем ссылку на камеру
+        }
+
         private void FixedUpdate()
         {
-            // Desired position of the camera
+            // Желаемая позиция камеры
             Vector3 desiredPosition = target.position + offset;
 
-            // Maintain a fixed Z position for 2D (e.g., -10)
-            desiredPosition.z = -10; // or any appropriate value for your game
+            // Получаем размеры канваса в мировых координатах
+            Vector3[] canvasCorners = new Vector3[4];
+            canvasRectTransform.GetWorldCorners(canvasCorners);
+            float minX = canvasCorners[0].x;
+            float maxX = canvasCorners[2].x;
+            float minY = canvasCorners[0].y;
+            float maxY = canvasCorners[2].y;
 
-            // Smooth the camera movement between its current and the desired position
+            // Учитываем ширину и высоту камеры (для 2D-режима)
+            float cameraHeight = cam.orthographicSize;
+            float cameraWidth = cameraHeight * cam.aspect;
+
+            // Ограничиваем позицию камеры, чтобы она не выходила за пределы канваса
+            desiredPosition.x = Mathf.Clamp(desiredPosition.x, minX + cameraWidth, maxX - cameraWidth);
+            desiredPosition.y = Mathf.Clamp(desiredPosition.y, minY + cameraHeight, maxY - cameraHeight);
+
+            // Сглаживаем движение камеры
             Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
 
-            // Apply the smoothed position to the camera
+            // Применяем сглаженную позицию
             transform.position = smoothedPosition;
 
-            // Optional: Make the camera look at the target (not usually needed in 2D)
-            // transform.LookAt(target); // Comment this out for 2D games
+            // Устанавливаем фиксированную позицию Z для 2D (например, -10)
+            transform.position = new Vector3(transform.position.x, transform.position.y, -10);
         }
     }
 }
