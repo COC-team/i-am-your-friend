@@ -490,7 +490,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cutsceneDuration: 6
-  nextSceneName: 
+  nextSceneName: DrunkCleaning
 --- !u!320 &1047401489
 PlayableDirector:
   m_ObjectHideFlags: 0

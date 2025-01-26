@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
         // Завершаем игру
         isGameRunning = false;
         Debug.Log("Игра окончена! Время истекло.");
-        sceneReloader.ReloadScene();
+        SceneManager.LoadScene("DrunkDeathScreen");
     }
     
     public void WinGame()
