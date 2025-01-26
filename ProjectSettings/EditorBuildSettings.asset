@@ -35,6 +35,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Cutscenes/RoachesCutscene/RoachesCutscene.unity
     guid: 4a56e698e6d405340a3f4955ece48780
+  - enabled: 1
+    path: Assets/Scenes/Menu/Menu.unity
+    guid: 1e30ce52e2d993244a0c8a7bd98ffcc6
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
