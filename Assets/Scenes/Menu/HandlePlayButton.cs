@@ -12,7 +12,7 @@ public class HandlePlayButton : MonoBehaviour
     public void StartGame()
     {
         Debug.Log("hi");
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("IntroCutscene");
     }
 
     // Update is called once per frame
