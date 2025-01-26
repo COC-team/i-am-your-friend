@@ -30,7 +30,8 @@ namespace Scenes.MainScene.Scripts
             float horizontal = Input.GetAxisRaw("Horizontal"); // A (-1) and D (1)
             float vertical = Input.GetAxisRaw("Vertical");     // W (1) and S (-1)
             
-            // animator.SetFloat("Horizontal", horizontal);
+            // animator.SetInteger("horizontal", (int) horizontal);
+            animator.SetInteger("horizontal", horizontal > 0.1 ? 1 : horizontal < -0.1 ? -1 : 0);
             // animator.SetFloat("Vertical", vertical);
 
             // Create a movement vector
