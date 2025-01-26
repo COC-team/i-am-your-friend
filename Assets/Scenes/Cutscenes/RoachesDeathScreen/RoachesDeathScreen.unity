@@ -327,7 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cutsceneDuration: 9
-  nextSceneName: 
+  nextSceneName: KillRoaches
 --- !u!1 &904504755
 GameObject:
   m_ObjectHideFlags: 0

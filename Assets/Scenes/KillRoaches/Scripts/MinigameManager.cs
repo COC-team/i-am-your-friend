@@ -64,7 +64,7 @@ namespace Scenes.KillRoaches.Scripts
         // Завершаем игру
         isGameRunning = false;
         Debug.Log("Игра окончена! Время истекло.");
-        sceneReloader.ReloadScene();
+        SceneManager.LoadScene("RoachesDeathScreen");
     }
     
     public void WinGame()

@@ -8,12 +8,22 @@ public class GameStateManager : MonoBehaviour
     public bool[] miniGameStarted = { false, false, false };
     public bool[] miniGameCompleted = { false, false, false };
 
+    public AudioClip completionSound; // Звук завершения игры
+    private AudioSource audioSource;
+
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            // Добавляем AudioSource, если его нет
+            audioSource = GetComponent<AudioSource>();
+            if (audioSource == null)
+            {
+                audioSource = gameObject.AddComponent<AudioSource>();
+            }
         }
         else
         {
@@ -34,7 +44,12 @@ public class GameStateManager : MonoBehaviour
     {
         if (miniGameIndex >= 0 && miniGameIndex < miniGameCompleted.Length)
         {
-            miniGameCompleted[miniGameIndex] = true;
+            if (!miniGameCompleted[miniGameIndex]) // Если игра еще не завершена
+            {
+                miniGameCompleted[miniGameIndex] = true;
+                PlayCompletionSound(); // Воспроизводим звук завершения
+                Debug.Log($"Мини-игра {miniGameIndex} завершена!");
+            }
         }
     }
     
@@ -46,8 +61,21 @@ public class GameStateManager : MonoBehaviour
             {
                 miniGameCompleted[i] = true;
                 miniGameStarted[i] = false;
+                PlayCompletionSound(); // Воспроизводим звук завершения
                 Debug.Log($"Мини-игра {i} была активной и теперь отмечена как пройденная.");
             }
+        }
+    }
+
+    private void PlayCompletionSound()
+    {
+        if (audioSource != null && completionSound != null)
+        {
+            audioSource.PlayOneShot(completionSound); // Проигрываем звук
+        }
+        else
+        {
+            Debug.LogWarning("AudioSource или AudioClip не назначены!");
         }
     }
 }

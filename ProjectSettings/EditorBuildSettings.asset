@@ -41,6 +41,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Cutscenes/DrunkDeathScreen/DrunkDeathScreen.unity
     guid: efe7e7a136a2e2f478ddd6b841891a67
+  - enabled: 1
+    path: Assets/Scenes/Cutscenes/RoachesDeathScreen/RoachesDeathScreen.unity
+    guid: e24ae2a12d4d0e4498b119ac7ad80f87
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
