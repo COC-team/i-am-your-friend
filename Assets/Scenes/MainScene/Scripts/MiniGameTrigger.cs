@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class MiniGameTrigger : MonoBehaviour
 {
@@ -27,6 +28,30 @@ public class MiniGameTrigger : MonoBehaviour
         if (miniGameIndex >= 0 && miniGameIndex < GameStateManager.Instance.miniGameCompleted.Length)
         {
             // Проверяем статус мини-игры
+            StartCoroutine(InitializeMiniGameTrigger()); // Ждем, пока GameStateManager обновит статусы игр
+            isGameCompleted = GameStateManager.Instance.miniGameCompleted[miniGameIndex];
+            exclamationMark.SetActive(!isGameCompleted); // Отображаем восклицательный знак только если игра не пройдена
+        }
+        else
+        {
+            Debug.LogError($"Некорректный индекс мини-игры: {miniGameIndex}");
+        }
+
+        // Скрыть текст взаимодействия при старте
+        interactText.transform.position = new Vector3(-10, -10, -10);
+    }
+    
+    private IEnumerator InitializeMiniGameTrigger()
+    {
+        if (loadSceneName == null)
+        {
+            throw new Exception("Specify scene name");
+        }
+
+        if (miniGameIndex >= 0 && miniGameIndex < GameStateManager.Instance.miniGameCompleted.Length)
+        {
+            // Ждем немного, пока GameStateManager обновит статусы
+            yield return new WaitForSeconds(0.5f); 
             isGameCompleted = GameStateManager.Instance.miniGameCompleted[miniGameIndex];
             exclamationMark.SetActive(!isGameCompleted); // Отображаем восклицательный знак только если игра не пройдена
         }
