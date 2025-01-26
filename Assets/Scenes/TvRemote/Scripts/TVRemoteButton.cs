@@ -1,6 +1,8 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class TVRemoteButton : MonoBehaviour
 {
@@ -8,11 +10,14 @@ public class TVRemoteButton : MonoBehaviour
     [SerializeField] private TMP_Text inputDisplay;    // Displays the entered digits
     [SerializeField] private Animator animator;        // Handles animations
     [SerializeField] private Image displayImage;       // Image to display after each trigger
+    public TextMeshProUGUI displayText;
     [SerializeField] private AudioSource audioSource;  // Audio source for playing sounds
     [SerializeField] private AudioClip step0Sound;     // Sound for the initial step
     [SerializeField] private AudioClip step1Sound;     // Sound for step 1
     [SerializeField] private AudioClip step2Sound;     // Sound for step 2
     [SerializeField] private AudioClip step3Sound;     // Sound for step 3
+    public AudioClip footballSound;
+    public AudioClip finishSound;
 
     private static string channelInput = "";          // Stores the user's input
     public static int currentChannel = 0;             // The current channel
@@ -41,6 +46,14 @@ public class TVRemoteButton : MonoBehaviour
                 channelInput = "";
                 UpdateInputDisplay();
             }
+        }
+    }
+
+    void Start()
+    {
+        if (step0Sound != null)
+        {
+            TriggerStep(step0Sound, "Start with channel 52.");
         }
     }
 
@@ -76,35 +89,40 @@ public class TVRemoteButton : MonoBehaviour
             animator.SetInteger("channel", channel);
 
             // Handle the sequence of steps
-
-            TriggerStep(step0Image, step0Sound, "Dad says: Start with channel 45.");
-            step0Triggered = true;
-            else if (!step1Triggered && channel == 52)
+            
+            if (!step1Triggered && channel == 52)
             {
-                TriggerStep(step1Image, step1Sound, "Dad says: Good, now switch to channel 90.");
+                TriggerStep(step1Sound, "Good, now switch to channel 90.");
                 step1Triggered = true;
             }
             else if (step1Triggered && !step2Triggered && channel == 90)
             {
-                TriggerStep(step2Image, step2Sound, "Dad says: Great, now switch to channel 16 for football.");
+                TriggerStep(step2Sound, "Great, now switch to channel 16 for football.");
                 step2Triggered = true;
             }
             else if (step1Triggered && step2Triggered && channel == 16)
             {
-                TriggerStep(step3Image, step3Sound, "Football animation triggered!");
+                TriggerStep(step3Sound, "Good job, son. Now go help your mother.");
                 animator.SetTrigger("FootballAnimationTrigger");
+                audioSource.Play();
+                EndGameTimeout();
             }
         }
     }
 
-    private void TriggerStep(Sprite stepImage, AudioClip stepSound, string logMessage)
+    async void EndGameTimeout()
     {
-        // Update the image display
-        if (displayImage != null && stepImage != null)
-        {
-            displayImage.sprite = stepImage;
-            displayImage.enabled = true; // Ensure the image is visible
-        }
+        await Task.Delay(6000);
+        audioSource.Stop();
+        await Task.Delay(300);
+        audioSource.PlayOneShot(finishSound);
+        await Task.Delay(2);
+        SceneManager.LoadScene("MainScene");
+    }
+
+    private void TriggerStep(AudioClip stepSound, string logMessage)
+    {
+        displayText.text = logMessage;
 
         // Play the sound
         if (audioSource != null && stepSound != null)
