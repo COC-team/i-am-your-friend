@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
+using Scenes.KillRoaches.Scripts;
 
 public class BubbleInteraction : MonoBehaviour
 {
@@ -27,9 +28,21 @@ public class BubbleInteraction : MonoBehaviour
     public int killDelay = 1;
     private CancellationTokenSource acidCts = new CancellationTokenSource();
     private CancellationTokenSource killCts = new CancellationTokenSource();
+
+    private int killedAmount = 0;
+    private MinigameManager minigameManager;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        
+        minigameManager = FindObjectOfType<MinigameManager>();
+
+        // Убедитесь, что MinigameManager найден
+        if (minigameManager == null)
+        {
+            Debug.LogError("MinigameManager не найден! Убедитесь, что он есть в сцене.");
+        }
         Array.Fill(cockroachesInBubble, null);
         bubble = GameObject.Find("Bubble");
         acid = GameObject.Find("Acid");
@@ -128,6 +141,12 @@ public class BubbleInteraction : MonoBehaviour
             if (cockroachesInBubble[i] != null && cockroachesInBubble[i].GetInstanceID() == cockroach.GetInstanceID())
             {
                 cockroachesInBubble[i] = null;
+                killedAmount++;
+
+                if (killedAmount == 7)
+                {
+                    minigameManager.WinGame();
+                }
                 break;
             }
         }

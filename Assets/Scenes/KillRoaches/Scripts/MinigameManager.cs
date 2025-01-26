@@ -8,6 +8,7 @@ namespace Scenes.KillRoaches.Scripts
     public float gameDuration = 30f;        // Время игры в секундах
     private float timer;                    // Таймер игры
     private bool isGameRunning;             // Статус игры
+    public SceneReloader sceneReloader;
 
     public RectTransform maskRectTransform; // Маска для обрезки спрайта (RectTransform)
     public RectTransform spriteRectTransform; // Спрайт, который мы будем обрезать
@@ -63,6 +64,15 @@ namespace Scenes.KillRoaches.Scripts
         // Завершаем игру
         isGameRunning = false;
         Debug.Log("Игра окончена! Время истекло.");
+        sceneReloader.ReloadScene();
+    }
+    
+    public void WinGame()
+    {
+        // Завершаем игру
+        isGameRunning = false;
+        Debug.Log("Игра окончена! Вы победили.");
+        SceneManager.LoadScene("MainScene");
     }
 
     void UpdateMaskPosition()

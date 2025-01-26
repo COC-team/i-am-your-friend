@@ -29,6 +29,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/KillRoaches/KillRoaches.unity
     guid: 8add471c9fe867e4aa7f38f41f7f53e7
+  - enabled: 1
+    path: Assets/Scenes/Cutscenes/DrunkCutscene/DrunkCutscene.unity
+    guid: 572ed9884a5a284488950a7eeca99396
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -8562,7 +8562,7 @@ MonoBehaviour:
   player: {fileID: 2143072740}
   triggerRadius: 300
   textOffset: {x: 0, y: 0}
-  loadSceneName: DrunkCleaning
+  loadSceneName: DrunkCutscene
   miniGameIndex: 1
   exclamationMark: {fileID: 796524314}
   mainCamera: {fileID: 2075108576}

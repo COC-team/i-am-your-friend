@@ -9,7 +9,7 @@ public class DrunkCutscene : MonoBehaviour
     void Start()
     {
         // Automatically end the cutscene after the specified duration
-        Invoke("DrunkCutscene", cutsceneDuration);
+        Invoke("EndCutscene", cutsceneDuration);
     }
 
     private void EndCutscene()
