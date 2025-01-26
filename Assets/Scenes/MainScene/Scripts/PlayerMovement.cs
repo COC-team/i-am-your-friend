@@ -13,6 +13,15 @@ namespace Scenes.MainScene.Scripts
         void Start()
         {
             rb = GetComponent<Rigidbody2D>();
+            Cursor.visible = false;
+            
+            GameObject player = GameObject.FindWithTag("Player");
+            if (GameStateManager.Instance != null 
+                && player != null 
+                && GameStateManager.Instance.playerPosition != Vector3.zero)
+            {
+                player.transform.position = GameStateManager.Instance.playerPosition;
+            }
         }
 
         // Update is called once per frame

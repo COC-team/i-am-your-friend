@@ -10,8 +10,12 @@ public class MiniGameTrigger : MonoBehaviour
     public float triggerRadius = 30f;
     public Vector2 textOffset = new Vector2(0, -1f);
     public string loadSceneName;
+    public int miniGameIndex;
+    public GameObject exclamationMark; // UI-иконка восклицательного знака
 
     public Camera mainCamera;
+
+    private bool isGameCompleted;
 
     void Start()
     {
@@ -19,7 +23,20 @@ public class MiniGameTrigger : MonoBehaviour
         {
             throw new Exception("Specify scene name");
         }
-        // Camera mainCamera = Camera.main;
+
+        if (miniGameIndex >= 0 && miniGameIndex < GameStateManager.Instance.miniGameCompleted.Length)
+        {
+            // Проверяем статус мини-игры
+            isGameCompleted = GameStateManager.Instance.miniGameCompleted[miniGameIndex];
+            exclamationMark.SetActive(!isGameCompleted); // Отображаем восклицательный знак только если игра не пройдена
+        }
+        else
+        {
+            Debug.LogError($"Некорректный индекс мини-игры: {miniGameIndex}");
+        }
+
+        // Скрыть текст взаимодействия при старте
+        interactText.transform.position = new Vector3(-10, -10, -10);
     }
 
     public int numSegments = 100;  // Number of segments for the circle (higher = smoother)
@@ -60,7 +77,14 @@ public class MiniGameTrigger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var distance = Vector2.Distance(new Vector2(player.position.x, player.position.y), 
+        if (isGameCompleted)
+        {
+            // Если игра пройдена, не показываем текст и не обрабатываем нажатие
+            interactText.transform.position = new Vector3(-10, -10, -10);
+            return;
+        }
+
+        var distance = Vector2.Distance(new Vector2(player.position.x, player.position.y),
             new Vector2(transform.position.x, transform.position.y));
 
         if (distance <= triggerRadius)
@@ -68,19 +92,21 @@ public class MiniGameTrigger : MonoBehaviour
             ShowText();
             if (Input.GetKeyDown(KeyCode.E))
             {
+                GameStateManager.Instance.playerPosition = GameObject.FindWithTag("Player").transform.position;
+                GameStateManager.Instance.StartMiniGame(miniGameIndex);
                 SceneManager.LoadScene(loadSceneName);
             }
         }
         else
         {
+            // Скрываем текст, если игрок вышел за пределы радиуса
             interactText.transform.position = new Vector3(-10, -10, -10);
         }
     }
-    
+
     void ShowText()
     {
         Vector2 bottomBorder = new Vector2(mainCamera.transform.position.x, mainCamera.transform.position.y - mainCamera.orthographicSize);
-        Debug.Log(bottomBorder);
         interactText.transform.position = new Vector2(bottomBorder.x + textOffset.x, bottomBorder.y + textOffset.y);
     }
 }
