@@ -9,10 +9,10 @@ public class HandlePlayButton : MonoBehaviour
         
     }
 
-    public void Play()
+    public void StartGame()
     {
-        SceneManager.LoadScene("MainScene");
         Debug.Log("hi");
+        SceneManager.LoadScene("MainScene");
     }
 
     // Update is called once per frame
