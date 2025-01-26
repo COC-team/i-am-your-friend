@@ -210,7 +210,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 16777215
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -354,7 +354,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cutsceneDuration: 15.5
-  nextSceneName: 
+  nextSceneName: KillRoaches
 --- !u!1 &657486502
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,7 +531,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 14483200
+    rgba: 4292673280
   m_fontColor: {r: 0, g: 1, b: 0.8612397, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3

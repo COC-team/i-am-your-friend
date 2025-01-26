@@ -11056,7 +11056,7 @@ MonoBehaviour:
   player: {fileID: 2143072740}
   triggerRadius: 300
   textOffset: {x: 0, y: 0}
-  loadSceneName: KillRoaches
+  loadSceneName: RoachesCutscene
   miniGameIndex: 0
   exclamationMark: {fileID: 330850388}
   mainCamera: {fileID: 2075108576}
