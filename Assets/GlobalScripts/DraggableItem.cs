@@ -43,7 +43,7 @@ public class DraggableItem : MonoBehaviour, IPointerDownHandler, IDragHandler
                 canvasRect, eventData.position, uiCamera, out Vector3 worldPointerPos))
         {
             // Новая позиция с учетом смещения
-            Vector2 newPosition = (Vector2)worldPointerPos - offset;
+            Vector2 newPosition = (Vector2) worldPointerPos - offset;
 
             // Ограничиваем объект в пределах Canvas
             newPosition = ClampToCanvas(newPosition);

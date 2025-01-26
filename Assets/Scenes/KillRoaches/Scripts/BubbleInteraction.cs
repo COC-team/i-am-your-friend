@@ -15,6 +15,11 @@ public class BubbleInteraction : MonoBehaviour
     private Color originalColor;
 
     private bool _isBubbleAcid = false;
+    private bool _isSuckingAcid = false;
+
+    private float _rChange;
+    private float _gChange;
+    private float _bChange;
 
     private GameObject[] cockroachesInBubble = new GameObject[8];
 
@@ -30,13 +35,17 @@ public class BubbleInteraction : MonoBehaviour
         acid = GameObject.Find("Acid");
         bubbleRenderer = bubble.GetComponent<SpriteRenderer>();
         originalColor = bubbleRenderer.color;
+        Debug.Log($"Bubble renderer: {bubbleRenderer.color}");
+        
+        _rChange = (Color.magenta.r - bubbleRenderer.color.r) / 2;
+        _gChange = (Color.magenta.g - bubbleRenderer.color.g) / 2;
+        _bChange = (Color.magenta.b - bubbleRenderer.color.b) / 2;
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.GameObject().name == "Acid")
         {
-            Debug.Log("Acid");
             paintBubbleTimeout();
             
         } else if (other.gameObject.CompareTag("Cockroaches") && _isBubbleAcid)
@@ -64,15 +73,27 @@ public class BubbleInteraction : MonoBehaviour
         Task timeoutTask = Task.Delay(acidDelay * 1000, acidCts.Token);
         try
         {
+            _isSuckingAcid = true;
             await Task.WhenAll(new Task[] { timeoutTask });
-            // PaintBubble();
             MakeAcid();
+            _isSuckingAcid = false;
         }
         catch (OperationCanceledException)
         {
-            
+            _isSuckingAcid = false;
+            ReturnToOriginalColor();
         }
 
+    }
+
+    private void FixedUpdate()
+    {
+        if (_isSuckingAcid)
+        {
+            bubbleRenderer.color = new Color(bubbleRenderer.color.r + Time.deltaTime * _rChange, 
+                bubbleRenderer.color.g + Time.deltaTime * _gChange, 
+                bubbleRenderer.color.b + Time.deltaTime * _bChange);
+        }
     }
 
     async void killCockroachTimeout(int id)

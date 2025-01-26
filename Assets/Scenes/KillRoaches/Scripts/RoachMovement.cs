@@ -9,16 +9,17 @@ namespace Scenes.KillRoaches.Scripts
         public Animator animator;
         public float moveSpeed = 5f;
         public float maxMovementDistance = 10f;
+        public SpriteRenderer background;
         private RectTransform _canvasRect;
         private Rigidbody2D _rb;
         private BoxCollider2D _collider;
         private Vector2 _roachSize;
         private Vector2 _movement;
         
-        private float _canvasMinX;
-        private float _canvasMaxX;
-        private float _canvasMinY;
-        private float _canvasMaxY;
+        private float _backgroundMinX;
+        private float _backgroundMaxX;
+        private float _backgroundMinY;
+        private float _backgroundMaxY;
         
         private Vector2 _startPosition = new Vector2(0, 0);
         private Vector2 _endPosition = new Vector2(0, 0);
@@ -48,11 +49,12 @@ namespace Scenes.KillRoaches.Scripts
             
             Vector3[] canvasCorners = new Vector3[4];
             _canvasRect.GetWorldCorners(canvasCorners);
-            
-            _canvasMinX = canvasCorners[0].x;
-            _canvasMaxX = canvasCorners[2].x;
-            _canvasMinY = canvasCorners[0].y;
-            _canvasMaxY = canvasCorners[2].y;
+
+            var bounds = background.bounds;
+            _backgroundMinX = bounds.min.x;
+            _backgroundMaxX = bounds.max.x;
+            _backgroundMinY = bounds.min.y;
+            _backgroundMaxY = bounds.max.y;
             float roachWidthHalf = _roachSize.x / 2;
             float roachHeightHalf = _roachSize.y / 2;
             
@@ -69,7 +71,7 @@ namespace Scenes.KillRoaches.Scripts
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            if (other.gameObject.name == "Acid")
+            if (other.gameObject.CompareTag("Objects"))
             {
                 GetRandomMovement();
             }
@@ -77,7 +79,7 @@ namespace Scenes.KillRoaches.Scripts
 
         private void OnCollisionStay2D(Collision2D other)
         {
-            if (other.gameObject.name == "Acid")
+            if (other.gameObject.CompareTag("Objects"))
             {
                 GetRandomMovement();
             }
@@ -183,26 +185,26 @@ namespace Scenes.KillRoaches.Scripts
             float halfSpriteSizeY = spriteMaxHeight / 2;
             Vector2 newPosition = _rb.position + moveSpeed * Time.fixedDeltaTime * _movement;
 
-            if (newPosition.x > _canvasMaxX - halfSpriteSizeX)
+            if (newPosition.x > _backgroundMaxX - halfSpriteSizeX)
             {
-                var intersection = GetIntersectionX(_canvasMaxX);
+                var intersection = GetIntersectionX(_backgroundMaxX);
                 newPosition.x = intersection.x - halfSpriteSizeX;
                 GetRandomMovement();
-            } else if (newPosition.x < _canvasMinX + halfSpriteSizeX)
+            } else if (newPosition.x < _backgroundMinX + halfSpriteSizeX)
             {
-                var intersection = GetIntersectionX(_canvasMinX);
+                var intersection = GetIntersectionX(_backgroundMinX);
                 newPosition.x = intersection.x + halfSpriteSizeX;
                 GetRandomMovement();
             }
             
-            if (newPosition.y > _canvasMaxY - halfSpriteSizeY)
+            if (newPosition.y > _backgroundMaxY - halfSpriteSizeY)
             {
-                var intersection = GetIntersectionY(_canvasMaxY);
+                var intersection = GetIntersectionY(_backgroundMaxY);
                 newPosition.y = intersection.y - halfSpriteSizeY;
                 GetRandomMovement();
-            } else if (newPosition.y < _canvasMinY + halfSpriteSizeY)
+            } else if (newPosition.y < _backgroundMinY + halfSpriteSizeY)
             {
-                var intersection = GetIntersectionY(_canvasMinY);
+                var intersection = GetIntersectionY(_backgroundMinY);
                 newPosition.y = intersection.y + halfSpriteSizeY;
                 GetRandomMovement();
             }
