@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
         // Игра не начата, таймер равен 0
         timer = 0f;
         isGameRunning = false;
+        StartGame();
 
         // Убедитесь, что маска и спрайт привязаны в инспекторе
         if (maskRectTransform == null || spriteRectTransform == null)
@@ -26,11 +27,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        // Если игра не начата, проверяем, была ли нажата клавиша Enter
-        if (!isGameRunning && Input.GetKeyDown(KeyCode.Return))
-        {
-            StartGame();
-        }
 
         // Если игра идет, отсчитываем таймер
         if (isGameRunning)
@@ -83,7 +79,7 @@ public class GameManager : MonoBehaviour
             float screenWidth = Camera.main.orthographicSize * 2 * Screen.width / Screen.height;
 
             // Рассчитываем смещение маски влево
-            float shiftAmount = (screenWidth / 3f) * (1 - timePercent) * 21f; // Умножаем на 10 для усиления эффекта
+            float shiftAmount = (screenWidth / 3f) * (1 - timePercent) * 7f; // Умножаем на 10 для усиления эффекта
 
             // Обновляем позицию маски: смещаем её влево
             maskRectTransform.localPosition = new Vector3(-shiftAmount, maskRectTransform.localPosition.y, maskRectTransform.localPosition.z);
