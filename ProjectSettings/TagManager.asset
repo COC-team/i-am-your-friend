@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Destroyable
+  - button
   layers:
   - Default
   - TransparentFX
@@ -39,6 +40,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: screen
+    uniqueID: 2278681605
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
