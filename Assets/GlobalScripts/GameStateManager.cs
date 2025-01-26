@@ -5,8 +5,8 @@ public class GameStateManager : MonoBehaviour
     public static GameStateManager Instance;
 
     public Vector3 playerPosition;
-    public bool[] miniGameStarted = new bool[3];
-    public bool[] miniGameCompleted = new bool[3];
+    public bool[] miniGameStarted = { false, false, false };
+    public bool[] miniGameCompleted = { false, false, false };
 
     private void Awake()
     {

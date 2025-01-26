@@ -8562,7 +8562,7 @@ MonoBehaviour:
   player: {fileID: 2143072740}
   triggerRadius: 300
   textOffset: {x: 0, y: 0}
-  loadSceneName: DrunkCleaning
+  loadSceneName: DrunkCutscene
   miniGameIndex: 1
   exclamationMark: {fileID: 796524314}
   mainCamera: {fileID: 2075108576}
@@ -8611,6 +8611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a09d1d8a0f9297a41a35ed6567091cdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nextSceneName: FinalCutscene
 --- !u!4 &497530148
 Transform:
   m_ObjectHideFlags: 0
@@ -9330,7 +9331,7 @@ MonoBehaviour:
   player: {fileID: 2143072740}
   triggerRadius: 400
   textOffset: {x: 0, y: 0}
-  loadSceneName: TV
+  loadSceneName: TVCutscene
   miniGameIndex: 2
   exclamationMark: {fileID: 1279352941}
   mainCamera: {fileID: 2075108576}
@@ -11055,7 +11056,7 @@ MonoBehaviour:
   player: {fileID: 2143072740}
   triggerRadius: 300
   textOffset: {x: 0, y: 0}
-  loadSceneName: DrunkCleaning
+  loadSceneName: KillRoaches
   miniGameIndex: 0
   exclamationMark: {fileID: 330850388}
   mainCamera: {fileID: 2075108576}
