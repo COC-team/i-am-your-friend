@@ -32,6 +32,10 @@ public class BubbleInteraction : MonoBehaviour
     private int killedAmount = 0;
     private MinigameManager minigameManager;
     
+    private float currentRChange;
+    private float currentGChange;
+    private float currentBChange;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -87,7 +91,23 @@ public class BubbleInteraction : MonoBehaviour
         try
         {
             _isSuckingAcid = true;
-            await Task.WhenAll(new Task[] { timeoutTask });
+            float startTime = Time.time;
+            while (Time.time - startTime < acidDelay)
+            {
+                float elapsed = Time.time - startTime;
+                float lerpFactor = elapsed / acidDelay;
+            
+                currentRChange = Mathf.Lerp(0, _rChange, lerpFactor);
+                currentGChange = Mathf.Lerp(0, _gChange, lerpFactor);
+                currentBChange = Mathf.Lerp(0, _bChange, lerpFactor);
+
+                bubbleRenderer.color = new Color(bubbleRenderer.color.r + Time.deltaTime * currentRChange,
+                    bubbleRenderer.color.g + Time.deltaTime * currentGChange,
+                    bubbleRenderer.color.b + Time.deltaTime * currentBChange);
+
+                await Task.Yield();
+            }
+
             MakeAcid();
             _isSuckingAcid = false;
         }
@@ -96,18 +116,19 @@ public class BubbleInteraction : MonoBehaviour
             _isSuckingAcid = false;
             ReturnToOriginalColor();
         }
-
     }
+
 
     private void FixedUpdate()
     {
         if (_isSuckingAcid)
         {
-            bubbleRenderer.color = new Color(bubbleRenderer.color.r + Time.deltaTime * _rChange, 
-                bubbleRenderer.color.g + Time.deltaTime * _gChange, 
-                bubbleRenderer.color.b + Time.deltaTime * _bChange);
+            bubbleRenderer.color = new Color(bubbleRenderer.color.r + Time.deltaTime * currentRChange,
+                bubbleRenderer.color.g + Time.deltaTime * currentGChange,
+                bubbleRenderer.color.b + Time.deltaTime * currentBChange);
         }
     }
+
 
     async void killCockroachTimeout(int id)
     {
