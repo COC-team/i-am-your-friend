@@ -3197,7 +3197,7 @@ MonoBehaviour:
   bubble: {fileID: 1256667522}
   acid: {fileID: 1189102120}
   cockroachAnimator: {fileID: 244737040}
-  acidDelay: 2
+  acidDelay: 1333
   killDelay: 1
 --- !u!1 &1354312151
 GameObject:
